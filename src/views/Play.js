@@ -6,6 +6,7 @@ import {
   faChevronLeft,
   faPlus,
   faShoppingBasket,
+  faSignInAlt,
 } from "@fortawesome/free-solid-svg-icons";
 import { Appear } from "helpers/animations";
 import CardButton from "components/molecules/CardButton";
@@ -27,8 +28,9 @@ const Wrapper = styled.div`
   display: flex;
   flex-flow: column nowrap;
   width: 100%;
-  height: 100vh;
-  padding: 2.5rem 5rem;
+  min-height: 100vh;
+  max-height: 100vh;
+  padding: 2.5rem;
 `;
 
 const CardButtonsWrapper = styled.div`
@@ -48,6 +50,7 @@ const Row = styled.div`
 
 const StyledHeading = styled(Heading)`
   letter-spacing: 0.2rem;
+  margin: 0;
 `;
 
 const StyledLinkIcon = styled(FontAwesomeIcon)`
@@ -80,7 +83,7 @@ const StyledLink = styled(Link)`
   }
 `;
 
-function Play({ currentUser }) {
+function Play({ avatarId, hasServer, nickname, balance, isGuest }) {
   return (
     <Wrapper>
       <Row>
@@ -89,11 +92,23 @@ function Play({ currentUser }) {
           Back
         </StyledLink>
         <StyledHeading big={1}>AVAILABLE TABLES</StyledHeading>
-        <UserPanel avatarId={currentUser.avatarId} direction="down" />
+        <UserPanel
+          avatarId={avatarId}
+          nickname={nickname}
+          balance={balance}
+          isGuest={isGuest}
+          direction="down"
+        />
       </Row>
       <Row>
         <CardButtonsWrapper>
-          <CardButton bgcolor="blue" text="create" icon={faPlus} nomargin={1} />
+          <CardButton
+            bgcolor={hasServer ? "green" : "blue"}
+            text="create"
+            placeholder={hasServer ? "my table" : ""}
+            icon={hasServer ? faSignInAlt : faPlus}
+            nomargin={1}
+          />
           <CardButton
             bgcolor="orange"
             text="shop"
@@ -107,13 +122,11 @@ function Play({ currentUser }) {
 }
 
 Play.propTypes = {
-  currentUser: PropTypes.shape({
-    avatarId: PropTypes.number,
-    balance: PropTypes.number,
-    debt: PropTypes.number,
-    nickname: PropTypes.string,
-    isGuest: PropTypes.bool,
-  }).isRequired,
+  avatarId: PropTypes.number.isRequired,
+  balance: PropTypes.number.isRequired,
+  nickname: PropTypes.string.isRequired,
+  isGuest: PropTypes.bool.isRequired,
+  hasServer: PropTypes.bool.isRequired,
 };
 
 export default Play;

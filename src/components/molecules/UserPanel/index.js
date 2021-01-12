@@ -4,9 +4,10 @@ import styled, { css } from "styled-components";
 import Avatar from "components/atoms/Avatar";
 import Paragraph from "components/atoms/Paragraph";
 import { Appear } from "helpers/animations";
+import { auth } from "helpers/firebase";
+import { getLabel } from "helpers/functions";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSignOutAlt, faChevronUp } from "@fortawesome/free-solid-svg-icons";
-import { auth } from "helpers/firebase";
 import { useOutsideClick } from "hooks/useOutsideClick";
 
 const StyledAvatar = styled.div`
@@ -132,7 +133,7 @@ const DropdownItemIcon = styled(StyledIcon)`
   margin-right: 1rem;
 `;
 
-function UserPanel({ avatarId, direction }) {
+function UserPanel({ avatarId, nickname, balance, direction, isGuest }) {
   const dropdownRef = useRef(null);
 
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -152,11 +153,11 @@ function UserPanel({ avatarId, direction }) {
         onClick={() => setIsDropdownOpen((prevState) => !prevState)}
       >
         <StyledAvatar>
-          <Avatar id={avatarId} />
+          <Avatar id={avatarId} isGuest={isGuest} />
         </StyledAvatar>
         <UserInfo>
-          <Username>John Doe</Username>
-          <Balance>$15.4k</Balance>
+          <Username>{nickname}</Username>
+          <Balance>${getLabel(balance)}</Balance>
         </UserInfo>
         <DropdownIcon open={isDropdownOpen} direction={direction}>
           <StyledIcon icon={faChevronUp} />
@@ -167,12 +168,14 @@ function UserPanel({ avatarId, direction }) {
 }
 
 UserPanel.propTypes = {
-  avatarId: PropTypes.number,
+  avatarId: PropTypes.number.isRequired,
+  balance: PropTypes.number.isRequired,
+  nickname: PropTypes.string.isRequired,
+  isGuest: PropTypes.bool.isRequired,
   direction: PropTypes.oneOf(["up", "down"]),
 };
 
 UserPanel.defaultProps = {
-  avatarId: 0,
   direction: "up",
 };
 

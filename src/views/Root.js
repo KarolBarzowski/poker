@@ -8,8 +8,10 @@ import { auth, database } from "helpers/firebase";
 import Loading from "components/molecules/Loading";
 import Home from "views/Home";
 import Login from "views/Login";
+import Play from "views/Play";
 import NotFound from "views/NotFound";
 import NotSupported from "views/NotSupported";
+import Create from "views/Create";
 
 function Root() {
   const [isLoading, setIsLoading] = useState(true);
@@ -24,7 +26,13 @@ function Root() {
     auth.onAuthStateChanged(function (user) {
       if (user) {
         database.ref(`users/${user.uid}`).on("value", (snapshot) => {
-          const { avatarId, balance, debt, nickname } = snapshot.val();
+          const {
+            avatarId,
+            balance,
+            debt,
+            nickname,
+            pokerServer,
+          } = snapshot.val();
           const isGuest = user.isAnonymous;
           setCurrentUser({
             avatarId,
@@ -32,6 +40,8 @@ function Root() {
             debt,
             nickname,
             isGuest,
+            id: user.uid,
+            hasServer: !!pokerServer,
           });
           setIsLoggedIn(true);
           setIsLoading(false);
@@ -77,7 +87,32 @@ function Root() {
             <Route
               path="/"
               exact
-              render={() => <Home currentUser={currentUser} />}
+              render={() => (
+                <Home
+                  avatarId={currentUser.avatarId}
+                  nickname={currentUser.nickname}
+                  balance={currentUser.balance}
+                  isGuest={currentUser.isGuest}
+                />
+              )}
+            />
+            <Route
+              path="/play"
+              render={() => (
+                <Play
+                  avatarId={currentUser.avatarId}
+                  nickname={currentUser.nickname}
+                  balance={currentUser.balance}
+                  isGuest={currentUser.isGuest}
+                  hasServer={currentUser.hasServer}
+                />
+              )}
+            />
+            <Route
+              path="/create"
+              render={() => (
+                <Create id={currentUser.id} nickname={currentUser.nickname} />
+              )}
             />
             <Route path="/login" component={Login} />
             <Route path="/sorry" component={NotSupported} />

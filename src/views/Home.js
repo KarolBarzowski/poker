@@ -31,28 +31,30 @@ const CardButtonsWrapper = styled.div`
   }
 `;
 
-function Home({ currentUser }) {
+function Home({ avatarId, nickname, balance, isGuest }) {
   return (
     <Wrapper>
       <Logo />
       <CardButtonsWrapper>
-        <CardButton secondary bgColor="green" text="bank" icon={faPiggyBank} />
-        <CardButton bgColor="blue" text="play" icon={faPlay} />
-        <CardButton secondary bgColor="orange" text="ranking" icon={faTrophy} />
+        <CardButton secondary bgcolor="green" text="bank" icon={faPiggyBank} />
+        <CardButton bgcolor="blue" text="play" icon={faPlay} />
+        <CardButton secondary bgcolor="orange" text="ranking" icon={faTrophy} />
       </CardButtonsWrapper>
-      <UserPanel avatarId={currentUser.avatarId} />
+      <UserPanel
+        avatarId={avatarId}
+        nickname={nickname}
+        balance={balance}
+        isGuest={isGuest}
+      />
     </Wrapper>
   );
 }
 
 Home.propTypes = {
-  currentUser: PropTypes.shape({
-    avatarId: PropTypes.number,
-    balance: PropTypes.number,
-    debt: PropTypes.number,
-    nickname: PropTypes.string,
-    isGuest: PropTypes.bool,
-  }).isRequired,
+  avatarId: PropTypes.number.isRequired,
+  balance: PropTypes.number.isRequired,
+  isGuest: PropTypes.bool.isRequired,
+  nickname: PropTypes.string.isRequired,
 };
 
 export default Home;
