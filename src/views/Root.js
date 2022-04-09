@@ -12,6 +12,7 @@ import Play from "views/Play";
 import NotFound from "views/NotFound";
 import NotSupported from "views/NotSupported";
 import Create from "views/Create";
+import Game from "views/Game";
 
 function Root() {
   const [isLoading, setIsLoading] = useState(true);
@@ -113,6 +114,10 @@ function Root() {
               render={() => (
                 <Create id={currentUser.id} nickname={currentUser.nickname} />
               )}
+            />
+            <Route
+              path="/table/:gameId"
+              render={() => <Game currentUser={currentUser} />}
             />
             <Route path="/login" component={Login} />
             <Route path="/sorry" component={NotSupported} />
